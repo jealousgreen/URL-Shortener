@@ -1,0 +1,7 @@
+app:
+  ttlHours: 24
+  defaultMaxClicks: 50
+  baseDomain: "short://"
+  dataFile: "data/storage.json"
+  notifyOnExpire: true
+  notifyOnLimit: true
