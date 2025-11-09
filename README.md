@@ -15,12 +15,12 @@
 
 ### Основные возможности
 
-- 🔐 **Уникальный UUID** для каждого пользователя
-- 🕒 **TTL (время жизни)** ссылки
-- 🚦 **Лимит переходов** 
-- 🔔 **Уведомления** об истечении срока или лимите
-- 💾 **Хранение данных** в JSON-файле (`data/storage.json`)
-- ⚙️ **Конфигурация** через YAML (`Application.yml`)
+🔐 **Уникальный UUID** для каждого пользователя
+🕒 **TTL (время жизни)** ссылки
+🚦 **Лимит переходов** 
+🔔 **Уведомления** об истечении срока или лимите
+💾 **Хранение данных** в JSON-файле (`data/storage.json`)
+⚙️ **Конфигурация** через YAML (`Application.yml`)
 
 ---
 
@@ -51,18 +51,47 @@ delete <shortCode>              удалить ссылку
 cleanup                         удалить истёкшие ссылки
 help                            показать справку
 ```
-```
-src/
- ├── main/
- │   ├── java/key/project/shortener/
- │   │   ├── core/        → доменная модель (Link, LinkStatus, Validation, UserContext)
- │   │   ├── repo/        → слой хранения (LinkRepository, FileLinkRepository)
- │   │   ├── service/     → бизнес-логика (ShortenerService, NotificationService)
- │   │   ├── config/      → конфигурация (AppConfig)
- │   │   ├── util/        → утилиты (Time)
- │   │   └── App.java → интерфейс с меню
- │   └── resources/
- │       └── application.yml
- └── test/
-     └── java/...         → JUnit-тесты
-```
+###  Архитектура проекта
+```text
+├── data/
+│   └── storage.json                              //хранилище ссылок
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── key/project/shortener/
+│   │   │       ├── App.java                      //Запуск, меню
+│   │   │       │
+│   │   │       ├── config/
+│   │   │       │   └── AppConfig.java            //загрузка настроек из application.yml
+│   │   │       │
+│   │   │       ├── core/
+│   │   │       │   ├── Link.java           
+│   │   │       │   ├── LinkStatus.java           //состояния ссылки
+│   │   │       │   ├── UrlCodeGenerator.java     //генерация коротких кодов
+│   │   │       │   ├── UserContext.java          //UUID пользователя
+│   │   │       │   └── Validation.java           //проверки валидности URL и данных
+│   │   │       │
+│   │   │       ├── repo/
+│   │   │       │   ├── LinkRepository.java       //интерфейс хранилища ссылок
+│   │   │       │   └── FileLinkRepository.java   //реализация на JSON-файле
+│   │   │       │
+│   │   │       ├── service/
+│   │   │       │   ├── ShortenerService.java     //создание/открытие/лимиты/TTL
+│   │   │       │   └── NotificationService.java  //уведомления
+│   │   │       │
+│   │   │       └── util/
+│   │   │           └── Time.java       
+│   │   │
+│   │   └── resources/
+│   │       └── application.yml                  //конфигурация (TTL, лимиты, путь хранилища)
+│   │
+│   └── test/
+│       └── java/
+│           └── key/project/shortener/test/
+│               ├── UrlCodeGeneratorTest.java        //тесты генерации кодов
+│               ├── ShortenerServiceLimitTest.java   //тест лимита переходов и TTL
+│               └── ShortenerServiceUserTest.java    //тест разные пользователи на один URL
+│
+├── .gitignore
+├── pom.xml
+└── README.md
