@@ -88,14 +88,20 @@
                 <version>2.44.0</version>
                 <configuration>
                     <java>
-                        <googleJavaFormat>
-                            <version>1.24.0</version>
-                        </googleJavaFormat>
+                        <includes>
+                            <include>src/main/java/**/*.java</include>
+                            <include>src/test/java/**/*.java</include>
+                        </includes>
+                        <trimTrailingWhitespace/>
+                        <endWithNewline/>
                     </java>
                 </configuration>
                 <executions>
                     <execution>
-                        <goals><goal>apply</goal><goal>check</goal></goals>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <phase>verify</phase>
                     </execution>
                 </executions>
             </plugin>
